@@ -19,7 +19,14 @@
 //    (.tarjeta img, .tarjeta h2, .tarjeta p).
 
 function renderizarDatosUsuario(datos) {
-  // Escribe aquí tu código para mostrar la foto, nombre completo e email en div.tarjeta
+  const usuario = datos.results[0];
+  const tarjeta = document.querySelector('.tarjeta');
+
+  tarjeta.innerHTML = `
+    <img src="${usuario.picture.large}" alt="Foto de ${usuario.name.first} ${usuario.name.last}" />
+    <h2>${usuario.name.title} ${usuario.name.first} ${usuario.name.last}</h2>
+    <p>${usuario.email}</p>
+  `;
 }
 
 /* -------------------------------- CONSIGNA 2 -------------------------------- */
@@ -29,5 +36,12 @@ function renderizarDatosUsuario(datos) {
 //    y actualizar la tarjeta sin recargar la página.
 
 function cargarUsuario() {
-  // Escribe aquí tu código para realizar un nuevo pedido a la API y actualizar la tarjeta
+  fetch('http://localhost:3000/api/user')
+    .then((response) => response.json())
+    .then((datos) => renderizarDatosUsuario(datos))
+    .catch((error) => console.error('Error al obtener el usuario:', error));
 }
+
+/* -------------------------------- Petición inicial (issue #2) -------------------------------- */
+// Al cargar la página, se pide un usuario apenas se abre el sitio.
+document.addEventListener('DOMContentLoaded', cargarUsuario);
